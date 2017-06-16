@@ -1,0 +1,395 @@
+Cmp-Mod V01 Created by Cvpcb (2015-02-06 BZR 5410)-product   date = Mon 09 Feb 2015 04:12:04 PM PST
+
+BeginCmp
+TimeStamp = /5942CB32;
+Reference = B1;
+ValeurCmp = 6.8MM_COIN_CELL;
+IdModule  = SPARKX_6.8MM_COIN_CELL;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942CBFA;
+Reference = C1;
+ValeurCmp = 0.1UF-0603-25V-(+80/-20%);
+IdModule  = SPARKFUN-CAPACITORS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942CCC2;
+Reference = C2;
+ValeurCmp = 1.0UF-0603-16V-10%;
+IdModule  = SPARKFUN-CAPACITORS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942CD8A;
+Reference = C3;
+ValeurCmp = 1.0UF-0603-16V-10%;
+IdModule  = SPARKFUN-CAPACITORS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942CE52;
+Reference = C4;
+ValeurCmp = 1.0UF-0603-16V-10%;
+IdModule  = SPARKFUN-CAPACITORS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942CF1A;
+Reference = D1;
+ValeurCmp = LED-BLUE0603;
+IdModule  = SPARKFUN-LED_LED-0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942CFE2;
+Reference = D2;
+ValeurCmp = DIODE-SCHOTTKY-PMEG4005EJ;
+IdModule  = SPARKFUN-DISCRETESEMI_SOD-323;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942D0AA;
+Reference = FB1;
+ValeurCmp = FERRITE_BEAD-0603;
+IdModule  = SPARKFUN-COILS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942D622;
+Reference = J1;
+ValeurCmp = U.FL;
+IdModule  = SPARKX_U.FL;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942D6EA;
+Reference = J2;
+ValeurCmp = I2C_STANDARDJS-1MM;
+IdModule  = SPARKX_1X04_1MM_RA;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942D7B2;
+Reference = J3;
+ValeurCmp = I2C_STANDARD_NO_SILK;
+IdModule  = SPARKX_1X04_NO_SILK;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942D87A;
+Reference = J4;
+ValeurCmp = I2C_STANDARDJS-1MM;
+IdModule  = SPARKX_1X04_1MM_RA;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942D942;
+Reference = J5;
+ValeurCmp = CONN_01PTH_NO_SILK_YES_STOP;
+IdModule  = SPARKFUN-CONNECTORS_1X01_NO_SILK;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942DA0A;
+Reference = J7;
+ValeurCmp = CONN_05NO_SILK;
+IdModule  = SPARKFUN-CONNECTORS_1X05_NO_SILK;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942DAD2;
+Reference = JP1;
+ValeurCmp = JUMPER-SMT_3_2-NC_PASTE_SILK;
+IdModule  = SPARKFUN-JUMPERS_SMT-JUMPER_3_2-NC_PASTE_SILK;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942DB9A;
+Reference = JP2;
+ValeurCmp = FIDUCIALUFIDUCIAL;
+IdModule  = SPARKFUN_MICRO-FIDUCIAL;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942DC62;
+Reference = JP3;
+ValeurCmp = STAND-OFF;
+IdModule  = SPARKFUN_STAND-OFF;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942DD2A;
+Reference = JP4;
+ValeurCmp = STAND-OFF;
+IdModule  = SPARKFUN_STAND-OFF;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942DDF2;
+Reference = JP5;
+ValeurCmp = JUMPER-SMT_2_NC_TRACE_NO-SILK;
+IdModule  = SPARKFUN-JUMPERS_SMT-JUMPER_2_NC_TRACE_NO-SILK;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942DEBA;
+Reference = JP6;
+ValeurCmp = FIDUCIALUFIDUCIAL;
+IdModule  = SPARKFUN_MICRO-FIDUCIAL;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942DF82;
+Reference = L1;
+ValeurCmp = INDUCTOR-0603-33NH;
+IdModule  = SPARKFUN-COILS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942E04A;
+Reference = LOGO1;
+ValeurCmp = OSHW-LOGOMINI;
+IdModule  = SPARKFUN-AESTHETICS_OSHW-LOGO-MINI;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942E112;
+Reference = R1;
+ValeurCmp = 10KOHM-0603-1/10W-1%;
+IdModule  = SPARKFUN-RESISTORS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942E1DA;
+Reference = R2;
+ValeurCmp = 10KOHM-0603-1/10W-1%;
+IdModule  = SPARKFUN-RESISTORS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942E2A2;
+Reference = R3;
+ValeurCmp = 470OHM-0603-1/10W-1%;
+IdModule  = SPARKFUN-RESISTORS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942E36A;
+Reference = R5;
+ValeurCmp = 1KOHM-0603-1/10W-1%;
+IdModule  = SPARKFUN-RESISTORS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942E432;
+Reference = R6;
+ValeurCmp = 470OHM-0603-1/10W-1%;
+IdModule  = SPARKFUN-RESISTORS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942E4FA;
+Reference = R7;
+ValeurCmp = 4.7KOHM-0603-1/10W-1%;
+IdModule  = SPARKFUN-RESISTORS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942E5C2;
+Reference = R8;
+ValeurCmp = 4.7KOHM-0603-1/10W-1%;
+IdModule  = SPARKFUN-RESISTORS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942E68A;
+Reference = R11;
+ValeurCmp = 470OHM-0603-1/10W-1%;
+IdModule  = SPARKFUN-RESISTORS_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942EA72;
+Reference = U$1;
+ValeurCmp = SPARKX-LOGO5;
+IdModule  = SPARKX_SPARKX-LARGE;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942EB3A;
+Reference = U1;
+ValeurCmp = TITAN_X1_GPS;
+IdModule  = SPARKX_TITAN_X1_GPS;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942EC02;
+Reference = VP_0;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942ECCA;
+Reference = VP_1;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942ED92;
+Reference = VP_2;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942EE5A;
+Reference = VP_3;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942EF22;
+Reference = VP_4;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942EFEA;
+Reference = VP_5;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942F0B2;
+Reference = VP_6;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942F17A;
+Reference = VP_7;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942F242;
+Reference = VP_8;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942F30A;
+Reference = VP_9;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942F3D2;
+Reference = VP_10;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942F49A;
+Reference = VP_11;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942F562;
+Reference = VP_12;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942F62A;
+Reference = VP_13;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942F6F2;
+Reference = VP_14;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942F7BA;
+Reference = VP_15;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942F882;
+Reference = VP_16;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942F94A;
+Reference = VP_17;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942FA12;
+Reference = VP_18;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942FADA;
+Reference = VP_19;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942FBA2;
+Reference = VP_20;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942FC6A;
+Reference = VP_21;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942FD32;
+Reference = VP_22;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+BeginCmp
+TimeStamp = /5942FDFA;
+Reference = VP_23;
+ValeurCmp = VPDEV0;
+IdModule  = VPAD_VPAC0;
+EndCmp
+
+EndListe
