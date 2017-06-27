@@ -1,4 +1,4 @@
-update=6/23/2017 1:21:08 PM
+update=6/26/2017 11:46:53 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -23,8 +23,6 @@ ModuleOutlineThickness=0.150000000000
 [cvpcb]
 version=1
 NetIExt=net
-[general]
-version=1
 [schematic_editor]
 LabSize=50
 [eeschema]
@@ -87,3 +85,5 @@ LibName53=SparkFun-Libraries/SparkFun-KiCad-Libraries-master/NewlyCreated/IC-Mic
 LibName54=SparkFun-Libraries/SparkFun-KiCad-Libraries-master/NewlyCreated/Sensors
 LibName55=SparkFun-Libraries/SparkFun-KiCad-Libraries-master/NewlyCreated/SparkX
 LibName56=SparkFun-Libraries/SparkFun-KiCad-Libraries-master/NewlyCreated/Switches
+[general]
+version=1
