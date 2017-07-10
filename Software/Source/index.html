@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
+<script src="logic.js"></script>
+
+  <body>
+<div id="floating-panel">
+  <input id="address" type="textbox" value="Boulder, CO">
+  <input id="submit" type="button" value="Go">
+</div>
+
+<div id="floating-logo">
+  <img src="SparkX.png" style="height: 40px;">
+</div>
+
+<div id="map"></div>
+<div id="statusBar"><span id="status">ready... (Hover over icons for tooltips!)</span></div>
+<div id="locOneBar">
+  <img src="z1label.png" class="labels">
+  <div class="ctrlbox">
+    <input type="image" src="icopin.png" id="setLocOne" class="ctrls" style="position: relative; top: 0px;" onclick="editLoc(1)" title="Edit this zone's position">
+    <input type="image" src="icoex.png" id="delLocOne" class="ctrls" style="position: relative; top: 0px;" onclick="delLoc(1)" title="Remove this zone">
+    <input type="image" src="icobox.png" id="boxOne" class="ctrls" style="position: relative; top: 0px;" onclick="makeBox(1)" title="Make this zone boundary rectangular">
+    <input type="image" src="icocirc.png" id="circOne" class="ctrlsSEL" style="position: relative; top: 0px;" onclick="makeCirc(1)" title="Make this zone boundary circular">
+  </div>
+  <textarea class="locData" id="locData1" rows="2" cols="30">No Boundary
+  </textarea>
+</div>
+<div id="locTwoBar">
+  <img src="z2label.png" class="labels">
+  <div class="ctrlbox">
+    <input type="image" src="icopin.png" id="setLocTwo" class="ctrls" style="position: relative; top: 0px;" onclick="editLoc(2)" title="Edit this zone's position">
+    <input type="image" src="icoex.png" id="delLocTwo" class="ctrls" style="position: relative; top: 0px;" onclick="delLoc(2)" title="Remove this zone">
+    <input type="image" src="icobox.png" id="boxTwo" class="ctrls" style="position: relative; top: 0px;" onclick="makeBox(2)" title="Make this zone boundary rectangular">
+    <input type="image" src="icocirc.png" id="circTwo" class="ctrlsSEL" style="position: relative; top: 0px;" onclick="makeCirc(2)" title="Make this zone boundary circular">
+  </div>
+  <textarea class="locData" id="locData2" rows="2" cols="30">No Boundary
+  </textarea>
+</div>
+<div id="locThreeBar">
+  <img src="z3label.png" class="labels">
+  <div class="ctrlbox">
+    <input type="image" src="icopin.png" id="setLocThree" class="ctrls" style="position: relative; top: 0px;" onclick="editLoc(3)" title="Edit this zone's position">
+    <input type="image" src="icoex.png" id="delLocThree" class="ctrls" style="position: relative; top: 0px;" onclick="delLoc(3)" title="Remove this zone">
+    <input type="image" src="icobox.png" id="boxThree" class="ctrls" style="position: relative; top: 0px;" onclick="makeBox(3)" title="Make this zone boundary rectangular">
+    <input type="image" src="icocirc.png" id="circThree" class="ctrlsSEL" style="position: relative; top: 0px;" onclick="makeCirc(3)" title="Make this zone boundary circular">
+  </div>
+  <textarea class="locData" id="locData3" rows="2" cols="30">No Boundary
+  </textarea>
+</div>
+<div id="locFourBar">
+  <img src="z4label.png" class="labels">
+  <div class="ctrlbox">
+    <input type="image" src="icopin.png" id="setLocFour" class="ctrls" style="position: relative; top: 0px;" onclick="editLoc(4)" title="Edit this zone's position">
+    <input type="image" src="icoex.png" id="delLocFour" class="ctrls" style="position: relative; top: 0px;" onclick="delLoc(4)" title="Remove this zone">
+    <input type="image" src="icobox.png" id="boxFour" class="ctrls" style="position: relative; top: 0px;" onclick="makeBox(4)" title="Make this zone boundary rectangular">
+    <input type="image" src="icocirc.png" id="circFour" class="ctrlsSEL" style="position: relative; top: 0px;" onclick="makeCirc(4)" title="Make this zone boundary circular">
+  </div>
+  <textarea class="locData" id="locData4" rows="2" cols="30">No Boundary
+  </textarea>
+</div>
+<br/>
+<div id="serialCtrls">
+  <input type="button" id="serialFind" value="Find Serial Ports" style="position: relative; top: 0px;" onclick="findDevices()">
+  <input type="button" id="serialSwitch" value="Open" style="position: relative; top: 0px;" onclick="serialSwitch()">
+  <select id="serialPortNum">
+    <option value="COM1">COM1</option>
+    <option value="COM2">COM2</option>
+    <option value="COM3">COM3</option>
+    <option value="COM4">COM4</option>
+  </select>
+  <input type="button" id="logData" value="Send Configuration" style="position: relative; top: 0px;" onclick="logDump()">
+</div>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXfMy2IVbDIUNO4Vhu7atKt2ke_b1Il7k&callback=initMap">
+
+
+</script>
+
+  </body>
+</html>

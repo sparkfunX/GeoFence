@@ -20,14 +20,14 @@ double zone3[5];
 double zone4[5];
 char zoneType[4];
 
-int zoneIOPin[] = {4,6,8,10};
+int zoneIOPin[] = {7,8,9,10};
 
 void setup() {
 
-  pinMode(13, OUTPUT);
-  digitalWrite(13, HIGH);
+  pinMode(6, OUTPUT);
+  digitalWrite(6, HIGH);
   loadConfig();
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   pinMode(5, OUTPUT);
   pinMode(7, OUTPUT);
@@ -74,7 +74,7 @@ void loop() {
 
     if(Serial.available()){
       while (Serial.read() != '$') {};
-      String configString = Serial.readString();
+      String configString = Serial.readStringUntil('$');
       configure(configString);
     }
 
@@ -82,11 +82,14 @@ void loop() {
 
 void configure(String configString) {
 
-  Serial.println("Clearing EEPROM");
+  //Serial.println("RX STRING:");
+  //Serial.println(configString);
+
+  //Serial.println("Clearing EEPROM");
   for (int i = 0 ; i < 100 ; i++) {
     EEPROM.write(i, 0);
   }
-  Serial.println("EEPROM Cleared...");
+  //Serial.println("EEPROM Cleared...");
 
   // Receive and Verify a configuration
 
@@ -101,9 +104,11 @@ void configure(String configString) {
 
     attempts++;
 
-    digitalWrite(13, LOW);
+    digitalWrite(6, LOW);
 
     strIndex++;
+
+    //Serial.println("parsing...");
 
     for (int zone = 0; zone < 4; zone++) {
       inByte = configString.charAt(strIndex); // Should contain Zone 1 Type (R/C/X)
@@ -188,6 +193,8 @@ void configure(String configString) {
       }
     }
 
+    //Serial.println("parsed");
+
     strIndex = strIndex + 2;
     linebuffer.remove(0);
     while (configString.charAt(strIndex) != 10) {
@@ -195,7 +202,12 @@ void configure(String configString) {
       strIndex++;
     }
 
+    //Serial.print("checksum received: ");
+    //Serial.println(linebuffer.toInt());
+
     int calcSum = 0;
+
+    //Serial.println("ready to calculate sum");
 
     for (int r = 0; configString.charAt(r) != '^'; r++) {
       calcSum = calcSum + configString.charAt(r);
@@ -204,7 +216,30 @@ void configure(String configString) {
     calcSum = calcSum + 140;
     calcSum = calcSum % 256;
 
+    //Serial.print("checksum calculated: ");
+    //Serial.println(calcSum);
+
     if (linebuffer.toInt() == calcSum) {
+      digitalWrite(6, 1);
+      delay(200);
+      digitalWrite(6,0);
+      delay(200);
+      digitalWrite(6, 1);
+      delay(200);
+      digitalWrite(6,0);
+      delay(200);
+      digitalWrite(6, 1);
+      delay(200);
+      digitalWrite(6,0);
+      delay(200);
+      digitalWrite(6, 1);
+      delay(200);
+      digitalWrite(6,0);
+      delay(200);
+      digitalWrite(6, 1);
+      delay(200);
+      digitalWrite(6,0);
+      delay(200);
       Serial.print("$\n"); //Checksum passed
       checksumPass = 1;
     } else {

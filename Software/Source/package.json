@@ -1,0 +1,29 @@
+{
+  "name": "GeoFence",
+  "author": "Nick Poole @ SparkFun Electronics",
+  "version": "0.1.0",
+  "main": "main.js",
+  "devDependencies": {
+    "electron": "1.4.15",
+    "electron-packager": "^8.7.1",
+    "electron-rebuild": "^1.5.11",
+    "serialport": "^4.0.7"
+  },
+  "scripts": {
+	"pack": "build --dir",
+	"dist": "build"
+},
+  "dependencies": {
+    "serialport": "^4.0.7"
+  },
+  "build": {
+	"appId": "GeoFence",
+	"mac": {
+	"icon": "",
+	"category": "Whatever"
+	},
+	"win": {
+	"icon": "./geo.ico"
+	}
+	}
+}

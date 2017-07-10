@@ -1,0 +1,131 @@
+body {
+  background-color: #f8f7f5;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.875em;
+}
+
+#serialCtrls {
+  position: relative;
+  text-align: center;
+}
+
+.labels {
+  height: 25px;
+  position: relative;
+  top: -5px;
+}
+
+.ctrlbox {
+  position: relative;
+  display: inline;
+  left: 30px;
+}
+
+.ctrls {
+  height: 30px;
+  margin: 5px;
+  margin-bottom: 2px;
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.ctrlsSEL {
+  height: 30px;
+  margin: 5px;
+  margin-bottom: 2px;
+  margin-right: 0px;
+  margin-left: 0px;
+  background-color: #b1b1b1;
+  pointer-events: none;
+}
+
+
+/* Always set the map height explicitly to define the size of the div
+ * element that contains the map. */
+
+#map {
+  height: 50%;
+}
+
+
+/* Optional: Makes the sample page fill the window. */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.active {}
+
+.faded {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+#statusBar {
+  position: relative;
+  background-color: white;
+}
+
+#floating-panel {
+  position: absolute;
+  top: 10px;
+  left: 25%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto', 'sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+}
+
+#floating-logo {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  z-index: 6;
+  padding: 5px;
+}
+
+#statusBar {
+  background-color: #333333;
+  color: #f8f7f5;
+}
+
+#locOneBar {
+  background-color: #f8f7f5;
+  height: auto;
+}
+
+#locTwoBar {
+  background-color: #e9e8e6;
+  height: auto;
+}
+
+#locThreeBar {
+  background-color: #f8f7f5;
+  height: auto;
+}
+
+#locFourBar {
+  background-color: #e9e8e6;
+  height: auto;
+}
+
+.locData {
+  position: relative;
+  left: 50px;
+  top: -2px;
+  background-color: transparent;
+  border: none;
+  overflow: hidden;
+  resize: none;
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
