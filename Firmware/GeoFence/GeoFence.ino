@@ -23,14 +23,20 @@ double zone3[5];
 double zone4[5];
 char zoneType[4];
 
-const byte STAT = 6; //Blue status LED next to ATmega
-const byte zoneIOPin[] = {7, 8, 9, 10}; //Four zone LEDs
+byte STAT = 6; //Blue status LED next to ATmega
+byte zoneIOPin[] = {7, 8, 9, 10}; //Four zone LEDs
+
+#define MODE_WAITING_FOR_LOCK 0
+#define MODE_GPS_LOCKED 1
+
+byte systemMode; //Keeps track of what mode we are in so as to control the status LED
 
 void setup()
 {
   //Setup I/O
   pinMode(STAT, OUTPUT);
-  digitalWrite(STAT, HIGH);
+  digitalWrite(STAT, HIGH); //Indicate we are waiting for GPS data
+
   loadConfig();
 
   //Configure Zone LEDs
@@ -43,13 +49,30 @@ void setup()
   //ATmega is running at 8MHz(3.3V). Serial above 57600bps is not good.
   Serial.begin(9600);
 
-  //  configMode();
-
   if (myI2CGPS.begin() == false)
   {
-    //Serial.println("Module failed to respond. Please check wiring.");
-    while (1); //Freeze!
+    //GPS communication failure
+    Serial.println("GPS module failed to respond. Please contact support.");
+
+    //Blink STAT and Zone LEDs to indicate fault
+    while (1) //Freeze!
+    {
+      digitalWrite(zoneIOPin[0], HIGH);
+      digitalWrite(zoneIOPin[1], LOW);
+      digitalWrite(zoneIOPin[2], HIGH);
+      digitalWrite(zoneIOPin[3], LOW);
+      digitalWrite(STAT, HIGH);
+      delay(1000);
+      digitalWrite(zoneIOPin[0], LOW);
+      digitalWrite(zoneIOPin[1], HIGH);
+      digitalWrite(zoneIOPin[2], LOW);
+      digitalWrite(zoneIOPin[3], HIGH);
+      digitalWrite(STAT, LOW);
+      delay(1000);
+    }
   }
+
+  systemMode = MODE_WAITING_FOR_LOCK;
 }
 
 void loop()
@@ -66,12 +89,60 @@ void loop()
     updateGeofence();
   }
 
+  //Once we have lock, go to new STAT LED mode
+  if (gps.location.isValid())
+    systemMode = MODE_GPS_LOCKED;
+  else
+    systemMode = MODE_WAITING_FOR_LOCK;
+
+
   // Check for a new config
   if (Serial.available()) {
     while (Serial.read() != '$') {};
     String configString = Serial.readStringUntil('$');
     configure(configString);
   }
+
+  //Control the status LED
+  if (systemMode == MODE_WAITING_FOR_LOCK)
+  {
+    //Blink LED every second
+    int onSeconds = millis() / 1000;
+    if (onSeconds % 2 == 0)
+      digitalWrite(STAT, HIGH);
+    else
+      digitalWrite(STAT, LOW);
+  }
+  else if (systemMode == MODE_GPS_LOCKED)
+  {
+    //Do LED heart beat
+    int onSeconds = millis() / 1000;
+    if (onSeconds % 4 == 0)
+    {
+      //Every 4th second, do a heart beat
+      int ledValue = millis() % 1000; //6721 % 1000 = 721
+
+      if (ledValue <= 500)
+      {
+        //Bring LED up in brightness
+        //Take the current time and turn it into a value 0 to 255
+        ledValue = map(ledValue, 0, 500, 0, 255);
+      }
+      else
+      {
+        //Bring LED down in brightness
+        //Take the current time and turn it into a value 0 to 255
+        ledValue = map(ledValue, 500, 1000, 255, 0); //721 becomes 113
+      }
+      analogWrite(STAT, ledValue);
+    }
+    else
+    {
+      //Leave LED off for a second
+      digitalWrite(STAT, LOW);
+    }
+  } //End STAT LED control
+
 
 }
 
@@ -287,7 +358,6 @@ void loadConfig() {
   if (zone4[0] != 0) {
     zoneType[3] = 'R';
   }
-
 }
 
 void str_to_double_to_EEPROM(String str, int addr) {
@@ -393,7 +463,6 @@ boolean checkRectangle(int zone) {
       Serial.println("Box Text Failed");
       return 0; //If not, return 0
     }
-
   }
 }
 
@@ -447,7 +516,6 @@ boolean checkCircle(int zone) {
   } else {
     Serial.println("Circle Test Failed");
     return 0;
-
   }
 }
 
