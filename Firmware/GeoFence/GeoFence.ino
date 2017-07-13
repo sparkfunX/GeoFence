@@ -4,6 +4,9 @@
   SparkFun Electronics
   Date: July 10th, 2017
   License: This code is public domain but you buy me a beer if you use this and we meet someday (Beerware license).
+
+  GeoFence has an ATmega running at 8MHz/3.3V. Select 'Pro Mini @ 3.3V/8MHz' from Boards menu to program
+  the device.
 */
 
 #include <SparkFun_I2C_GPS_Arduino_Library.h> //Use Library Manager or download here: https://github.com/sparkfun/SparkFun_I2C_GPS_Arduino_Library
@@ -14,35 +17,31 @@ TinyGPSPlus gps; //Declare gps object
 
 #include <EEPROM.h>
 
-double zone1[5];
+double zone1[5]; //Contains the 5 GPS coordinates for each zone
 double zone2[5];
 double zone3[5];
 double zone4[5];
 char zoneType[4];
 
-int zoneIOPin[] = {7,8,9,10};
+const byte STAT = 6; //Blue status LED next to ATmega
+const byte zoneIOPin[] = {7, 8, 9, 10}; //Four zone LEDs
 
-void setup() {
-
-  pinMode(6, OUTPUT);
-  digitalWrite(6, HIGH);
+void setup()
+{
+  //Setup I/O
+  pinMode(STAT, OUTPUT);
+  digitalWrite(STAT, HIGH);
   loadConfig();
-  Serial.begin(9600);
 
-  pinMode(5, OUTPUT);
-  pinMode(7, OUTPUT);
-  pinMode(9, OUTPUT);
-  pinMode(11, OUTPUT);
-
-  digitalWrite(5, LOW);
-  digitalWrite(7, LOW);
-  digitalWrite(9, LOW);
-  digitalWrite(11, LOW);
-
-  for(int z=0; z<4; z++){
+  //Configure Zone LEDs
+  for (byte z = 0; z < 4; z++)
+  {
     pinMode(zoneIOPin[z], OUTPUT);
     digitalWrite(zoneIOPin[z], LOW);
   }
+
+  //ATmega is running at 8MHz(3.3V). Serial above 57600bps is not good.
+  Serial.begin(9600);
 
   //  configMode();
 
@@ -51,14 +50,11 @@ void setup() {
     //Serial.println("Module failed to respond. Please check wiring.");
     while (1); //Freeze!
   }
-  //Serial.println("GPS module found!");
-
 }
 
-void loop() {
-
+void loop()
+{
   // Do GeoFence Things
-
   while (myI2CGPS.available()) //available() returns the number of new bytes available from the GPS module
   {
     gps.encode(myI2CGPS.read()); //Feed the GPS parser
@@ -71,28 +67,21 @@ void loop() {
   }
 
   // Check for a new config
-
-    if(Serial.available()){
-      while (Serial.read() != '$') {};
-      String configString = Serial.readStringUntil('$');
-      configure(configString);
-    }
+  if (Serial.available()) {
+    while (Serial.read() != '$') {};
+    String configString = Serial.readStringUntil('$');
+    configure(configString);
+  }
 
 }
 
-void configure(String configString) {
-
-  //Serial.println("RX STRING:");
-  //Serial.println(configString);
-
-  //Serial.println("Clearing EEPROM");
-  for (int i = 0 ; i < 100 ; i++) {
+void configure(String configString)
+{
+  //Clear current EEPROM settings
+  for (byte i = 0 ; i < 100 ; i++)
     EEPROM.write(i, 0);
-  }
-  //Serial.println("EEPROM Cleared...");
 
   // Receive and Verify a configuration
-
   String linebuffer;
   int addr = 0;
   int strIndex = 0;
@@ -104,7 +93,7 @@ void configure(String configString) {
 
     attempts++;
 
-    digitalWrite(6, LOW);
+    digitalWrite(STAT, LOW);
 
     strIndex++;
 
@@ -219,27 +208,16 @@ void configure(String configString) {
     //Serial.print("checksum calculated: ");
     //Serial.println(calcSum);
 
-    if (linebuffer.toInt() == calcSum) {
-      digitalWrite(6, 1);
-      delay(200);
-      digitalWrite(6,0);
-      delay(200);
-      digitalWrite(6, 1);
-      delay(200);
-      digitalWrite(6,0);
-      delay(200);
-      digitalWrite(6, 1);
-      delay(200);
-      digitalWrite(6,0);
-      delay(200);
-      digitalWrite(6, 1);
-      delay(200);
-      digitalWrite(6,0);
-      delay(200);
-      digitalWrite(6, 1);
-      delay(200);
-      digitalWrite(6,0);
-      delay(200);
+    if (linebuffer.toInt() == calcSum)
+    {
+      for (byte x = 0 ; x < 5 ; x++)
+      {
+        digitalWrite(STAT, HIGH);
+        delay(200);
+        digitalWrite(STAT, LOW);
+        delay(200);
+      }
+
       Serial.print("$\n"); //Checksum passed
       checksumPass = 1;
     } else {
@@ -271,13 +249,13 @@ void loadConfig() {
   }
 
   if (zone1[0] == 0 && zone1[2] == 0) {
-    zoneType[0] = 'X';
+    zoneType[0] = 'X'; //Not yet filled with coordinates
   }
   if (zone1[0] == 0 && zone1[2] != 0) {
-    zoneType[0] = 'C';
+    zoneType[0] = 'C'; //Circle
   }
   if (zone1[0] != 0) {
-    zoneType[0] = 'R';
+    zoneType[0] = 'R'; //Rectangle
   }
 
   if (zone2[0] == 0 && zone2[2] == 0) {
@@ -377,15 +355,15 @@ boolean checkRectangle(int zone) {
   if (neLng < swLng) { //If this is true, we're stradling the 180th. This is bad for the maths.
 
     //We must slice the box into two boxes with the max of one being 180 and the min of the other being -180
-    
+
     boolean zoneSubA = (min(neLng, swLng) > gps.location.lng() && gps.location.lng() > -180 && min(neLat, swLat) < gps.location.lat() && gps.location.lat() < max(neLat, swLat));
     boolean zoneSubB = (max(neLng, swLng) < gps.location.lng() && gps.location.lng() < 180 && min(neLat, swLat) < gps.location.lat() && gps.location.lat() < max(neLat, swLat));
 
     //If the current location falls into either of these halves, we're in the zone
 
-    if(zoneSubA || zoneSubB){
+    if (zoneSubA || zoneSubB) {
       return 1;
-    }else{
+    } else {
       return 0; //If not, return 0
     }
 
@@ -407,11 +385,11 @@ boolean checkRectangle(int zone) {
     Serial.println(gps.location.lng(), 6);
     Serial.print("Max(y1,y2): ");
     Serial.println(max(neLng, swLng), 6);
-    
-    if(min(neLat, swLat) < gps.location.lat() && gps.location.lat() < max(neLat, swLat) && min(neLng, swLng) < gps.location.lng() && gps.location.lng() < max(neLng, swLng)) {
+
+    if (min(neLat, swLat) < gps.location.lat() && gps.location.lat() < max(neLat, swLat) && min(neLng, swLng) < gps.location.lng() && gps.location.lng() < max(neLng, swLng)) {
       Serial.println("Box Test Passed");
       return 1;
-    }else{
+    } else {
       Serial.println("Box Text Failed");
       return 0; //If not, return 0
     }
@@ -465,11 +443,11 @@ boolean checkCircle(int zone) {
 
   if (distanceToCenter < zoneRadius) {
     Serial.println("Circle Test Passed");
-    return 1; 
-  }else{
+    return 1;
+  } else {
     Serial.println("Circle Test Failed");
-        return 0;
-        
+    return 0;
+
   }
 }
 

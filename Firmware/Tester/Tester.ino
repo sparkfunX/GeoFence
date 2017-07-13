@@ -1,27 +1,33 @@
 /*
-  Blink
-  Turns on an LED on for one second, then off for one second, repeatedly.
- 
-  This example code is in the public domain.
  */
  
-// Pin 13 has an LED connected on most Arduino boards.
-// Pin 11 has the LED on Teensy 2.0
-// Pin 6  has the LED on Teensy++ 2.0
-// Pin 13 has the LED on Teensy 3.0
-// give it a name:
-int led = 6;
+const byte STAT = 6;
+const byte ZONE1 = 7;
+const byte ZONE2 = 8;
+const byte ZONE3 = 9;
+const byte ZONE4 = 10;
 
-// the setup routine runs once when you press reset:
-void setup() {                
-  // initialize the digital pin as an output.
-  pinMode(led, OUTPUT);     
+void setup()
+{                
+  pinMode(STAT, OUTPUT);     
+  pinMode(ZONE1, OUTPUT);     
+  pinMode(ZONE2, OUTPUT);     
+  pinMode(ZONE3, OUTPUT);     
+  pinMode(ZONE4, OUTPUT);     
 }
 
-// the loop routine runs over and over again forever:
-void loop() {
-  digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(250);               // wait for a second
-  digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
-  delay(250);               // wait for a second
+void loop()
+{
+  digitalWrite(STAT, HIGH);
+  digitalWrite(ZONE1, HIGH);
+  digitalWrite(ZONE2, HIGH);
+  digitalWrite(ZONE3, HIGH);
+  digitalWrite(ZONE4, HIGH);
+  delay(250);
+  digitalWrite(STAT, LOW);
+  digitalWrite(ZONE1, LOW);
+  digitalWrite(ZONE2, LOW);
+  digitalWrite(ZONE3, LOW);
+  digitalWrite(ZONE4, LOW);
+  delay(250);
 }
