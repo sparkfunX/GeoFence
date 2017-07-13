@@ -109,9 +109,24 @@ void loop()
     //Blink LED every second
     int onSeconds = millis() / 1000;
     if (onSeconds % 2 == 0)
+    {
       digitalWrite(STAT, HIGH);
+
+      //Indicate the number of satellites we can see
+      if(gps.satellites.value() >= 1) digitalWrite(zoneIOPin[0], HIGH);
+      if(gps.satellites.value() >= 2) digitalWrite(zoneIOPin[1], HIGH);
+      if(gps.satellites.value() >= 3) digitalWrite(zoneIOPin[2], HIGH);
+      if(gps.satellites.value() >= 4) digitalWrite(zoneIOPin[3], HIGH);
+    }
+
     else
+    {
       digitalWrite(STAT, LOW);
+      digitalWrite(zoneIOPin[0], LOW);
+      digitalWrite(zoneIOPin[1], LOW);
+      digitalWrite(zoneIOPin[2], LOW);
+      digitalWrite(zoneIOPin[3], LOW);
+    }
   }
   else if (systemMode == MODE_GPS_LOCKED)
   {
