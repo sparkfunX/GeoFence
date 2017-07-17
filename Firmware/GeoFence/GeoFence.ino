@@ -17,11 +17,23 @@ TinyGPSPlus gps; //Declare gps object
 
 #include <EEPROM.h>
 
-double zone1[5]; //Contains the 5 GPS coordinates for each zone
+//zoneX[] contains the 4 GPS coordinates for each rectangular zone, or 2 coordinates 
+//and radius for a circular zone.
+double zone1[5]; 
 double zone2[5];
 double zone3[5];
 double zone4[5];
 char zoneType[4];
+
+//Zone information
+//zoneX[0] = North East Lat corner of the rectangle
+//1 = NE Long
+//2 = SW Lat
+//3 = SW Long
+//or
+//zoneX[2] = Center Lat of the circle
+//3 = Center Long of the circle
+//4 = Radius of circle
 
 byte STAT = 6; //Blue status LED next to ATmega
 byte zoneIOPin[] = {7, 8, 9, 10}; //Four zone LEDs
@@ -37,8 +49,6 @@ void setup()
   pinMode(STAT, OUTPUT);
   digitalWrite(STAT, HIGH); //Indicate we are waiting for GPS data
 
-  loadConfig();
-
   //Configure Zone LEDs
   for (byte z = 0; z < 4; z++)
   {
@@ -48,6 +58,9 @@ void setup()
 
   //ATmega is running at 8MHz(3.3V). Serial above 57600bps is not good.
   Serial.begin(9600);
+
+  //Load zone data and type from EEPROM
+  loadConfig();
 
   if (myI2CGPS.begin() == false)
   {
@@ -118,7 +131,6 @@ void loop()
       if(gps.satellites.value() >= 3) digitalWrite(zoneIOPin[2], HIGH);
       if(gps.satellites.value() >= 4) digitalWrite(zoneIOPin[3], HIGH);
     }
-
     else
     {
       digitalWrite(STAT, LOW);
@@ -317,10 +329,9 @@ void configure(String configString)
   }
 }
 
+//Load the zone information and type of zone (rectangle, circle, other) from NVM
 void loadConfig() {
-
-  // Pull config from EEPROM
-
+  //Get zones
   for (int i = 0; i < 5; i++) {
     EEPROM.get(i * 4, zone1[i]);
   }
@@ -334,13 +345,30 @@ void loadConfig() {
     EEPROM.get(60 + (i * 4), zone4[i]);
   }
 
+  //Error check zone data
+  //If unit does not have any location data (first time power on)
+  //then zero out the EEPROM
+  if(isnan(zone1[0])) zeroEEPROM();
+  if(zone1[0] > 360.0 || zone1[0] < -360.0) zeroEEPROM();
+
+  Serial.print("zone1: ");
+  Serial.println(zone1[0]);
+
+
+  while(1);
+
+  //Set zone types based on zoneX data
+  //00 = No coordinates
+  //01 = Circle
+  //1x = Rectangle
+  //255/255 = EEPROM initial state/not set
   if (zone1[0] == 0 && zone1[2] == 0) {
     zoneType[0] = 'X'; //Not yet filled with coordinates
   }
-  if (zone1[0] == 0 && zone1[2] != 0) {
+  else if (zone1[0] == 0 && zone1[2] != 0) {
     zoneType[0] = 'C'; //Circle
   }
-  if (zone1[0] != 0) {
+  else if (zone1[0] != 0) {
     zoneType[0] = 'R'; //Rectangle
   }
 
@@ -531,6 +559,20 @@ boolean checkCircle(int zone) {
   } else {
     Serial.println("Circle Test Failed");
     return 0;
+  }
+}
+
+//This is called when a new board is freshly programmed
+//We need to zero out the various EEPROM spots from their default 255
+//Reading a double from 0xFFFFFFFF in EEPROM = not a number (nan)
+void zeroEEPROM(void)
+{
+  Serial.println("Setting EEPROM to zero");
+  
+  //Zero out the 4 bytes for each of the 5 zones
+  for (byte i = 0 ; i < 5 * 4 ; i++)
+  {
+    EEPROM.write(i, 0);
   }
 }
 
