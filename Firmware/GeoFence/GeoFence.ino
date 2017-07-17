@@ -90,6 +90,17 @@ void setup()
 
   systemMode = MODE_WAITING_FOR_LOCK;
 
+  //Twiddle the zone LEDs to indicate we are ready to go
+  for (byte j = 0 ; j < 3 ; j++)
+  {
+    for (byte x = 0 ; x < 4 ; x++)
+    {
+      digitalWrite(zoneIOPin[x], HIGH);
+      delay(50);
+      digitalWrite(zoneIOPin[x], LOW);
+    }
+  }
+
   Serial.println("GeoFence v1.0 Online");
 }
 
@@ -123,7 +134,18 @@ void loop()
   if (Serial.available()) {
     while (Serial.read() != '$') {};
     String configString = Serial.readStringUntil('$');
-    configure(configString);
+
+    parseNewZoneData(configString);
+    //Twiddle the zone LEDs to indicate we have successfully received the new zone data
+    for (byte j = 0 ; j < 3 ; j++)
+    {
+      for (byte x = 0 ; x < 4 ; x++)
+      {
+        digitalWrite(zoneIOPin[x], HIGH);
+        delay(100);
+        digitalWrite(zoneIOPin[x], LOW);
+      }
+    }
   }
 
   //Control the status LED
@@ -183,11 +205,12 @@ void loop()
 
 }
 
-void configure(String configString)
+//Reads configuration data over serial port
+//Records checksum valid data to EEPROM
+void parseNewZoneData(String configString)
 {
   //Clear current EEPROM settings
-  for (byte i = 0 ; i < 100 ; i++)
-    EEPROM.write(i, 0);
+  zeroEEPROM();
 
   // Receive and Verify a configuration
   String linebuffer;
