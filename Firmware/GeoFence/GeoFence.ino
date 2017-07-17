@@ -62,8 +62,8 @@ void setup()
   //ATmega is running at 8MHz(3.3V). Serial above 57600bps is not good.
   Serial.begin(9600);
 
-  //Load zone data and type from EEPROM
-  loadConfig();
+  //Load zone data from EEPROM
+  loadZoneData();
 
   if (myI2CGPS.begin() == false)
   {
@@ -149,55 +149,14 @@ void loop()
   //Control the status LED
   if (systemMode == MODE_WAITING_FOR_LOCK)
   {
-    //Blink LED every second
-    int onSeconds = millis() / 1000;
-    if (onSeconds % 2 == 0)
-    {
+    if ((millis() / 1000) % 2 == 0) //Blink LED every other second
       digitalWrite(STAT_LED, HIGH);
-
-      //Indicate the number of satellites we can see
-      if (gps.satellites.value() >= 1) digitalWrite(zoneIOPin[0], HIGH);
-      if (gps.satellites.value() >= 2) digitalWrite(zoneIOPin[1], HIGH);
-      if (gps.satellites.value() >= 3) digitalWrite(zoneIOPin[2], HIGH);
-      if (gps.satellites.value() >= 4) digitalWrite(zoneIOPin[3], HIGH);
-    }
     else
-    {
       digitalWrite(STAT_LED, LOW);
-      digitalWrite(zoneIOPin[0], LOW);
-      digitalWrite(zoneIOPin[1], LOW);
-      digitalWrite(zoneIOPin[2], LOW);
-      digitalWrite(zoneIOPin[3], LOW);
-    }
   }
   else if (systemMode == MODE_GPS_LOCKED)
   {
-    //Do LED heart beat
-    int onSeconds = millis() / 1000;
-    if (onSeconds % 4 == 0)
-    {
-      //Every 4th second, do a heart beat
-      int ledValue = millis() % 1000; //6721 % 1000 = 721
-
-      if (ledValue <= 500)
-      {
-        //Bring LED up in brightness
-        //Take the current time and turn it into a value 0 to 255
-        ledValue = map(ledValue, 0, 500, 0, 255);
-      }
-      else
-      {
-        //Bring LED down in brightness
-        //Take the current time and turn it into a value 0 to 255
-        ledValue = map(ledValue, 500, 1000, 255, 0); //721 becomes 113
-      }
-      analogWrite(STAT_LED, ledValue);
-    }
-    else
-    {
-      //Leave LED off for a second
-      digitalWrite(STAT_LED, LOW);
-    }
+    digitalWrite(STAT_LED, HIGH);
   } //End STAT_LED control
 
 
@@ -364,7 +323,7 @@ boolean parseNewZoneData(String configString)
 }
 
 //Load the zone information and type of zone (rectangle, circle, other) from NVM
-void loadConfig() {
+void loadZoneData() {
   //Get zones
   for (int i = 0; i < 5; i++) {
     EEPROM.get(i * 4, zone1[i]);
@@ -458,6 +417,8 @@ void updateGeofence() {
   }
 }
 
+//Check to see if our current location is inside a given zone number
+//Returns true if we are inside the zone
 boolean checkRectangle(int zone) {
 
   double swLat, swLng, neLat, neLng;
@@ -503,9 +464,9 @@ boolean checkRectangle(int zone) {
     //If the current location falls into either of these halves, we're in the zone
 
     if (zoneSubA || zoneSubB) {
-      return 1;
+      return(true);
     } else {
-      return 0; //If not, return 0
+      return(false); //If not, return 0
     }
 
   } else { //In a more reasonable locale
@@ -529,10 +490,10 @@ boolean checkRectangle(int zone) {
 
     if (min(neLat, swLat) < gps.location.lat() && gps.location.lat() < max(neLat, swLat) && min(neLng, swLng) < gps.location.lng() && gps.location.lng() < max(neLng, swLng)) {
       Serial.println("Box Test Passed");
-      return 1;
+      return(true);
     } else {
       Serial.println("Box Text Failed");
-      return 0; //If not, return 0
+      return(false); //If not, return 0
     }
   }
 }
