@@ -91,15 +91,11 @@ void setup()
   systemMode = MODE_WAITING_FOR_LOCK;
 
   //Twiddle the zone LEDs to indicate we are ready to go
-  for (byte j = 0 ; j < 3 ; j++)
-  {
-    for (byte x = 0 ; x < 4 ; x++)
-    {
-      digitalWrite(zoneIOPin[x], HIGH);
-      delay(50);
-      digitalWrite(zoneIOPin[x], LOW);
-    }
-  }
+  for (byte x = 0 ; x < 4 ; x++)
+    digitalWrite(zoneIOPin[x], HIGH);
+  delay(500);
+  for (byte x = 0 ; x < 4 ; x++)
+    digitalWrite(zoneIOPin[x], LOW);
 
   Serial.println("GeoFence v1.0 Online");
 }
@@ -135,15 +131,17 @@ void loop()
     while (Serial.read() != '$') {};
     String configString = Serial.readStringUntil('$');
 
-    parseNewZoneData(configString);
-    //Twiddle the zone LEDs to indicate we have successfully received the new zone data
-    for (byte j = 0 ; j < 3 ; j++)
+    if (parseNewZoneData(configString) == true)
     {
-      for (byte x = 0 ; x < 4 ; x++)
+      //Twiddle the zone LEDs to indicate we have successfully received the new zone data
+      for (byte j = 0 ; j < 3 ; j++)
       {
-        digitalWrite(zoneIOPin[x], HIGH);
-        delay(100);
-        digitalWrite(zoneIOPin[x], LOW);
+        for (byte x = 0 ; x < 4 ; x++)
+        {
+          digitalWrite(zoneIOPin[x], HIGH);
+          delay(100);
+          digitalWrite(zoneIOPin[x], LOW);
+        }
       }
     }
   }
@@ -207,7 +205,8 @@ void loop()
 
 //Reads configuration data over serial port
 //Records checksum valid data to EEPROM
-void parseNewZoneData(String configString)
+//Returns true if four zones successfully received
+boolean parseNewZoneData(String configString)
 {
   //Clear current EEPROM settings
   zeroEEPROM();
@@ -350,7 +349,7 @@ void parseNewZoneData(String configString)
       }
 
       Serial.print("$\n"); //Checksum passed
-      checksumPass = 1;
+      return (true); //We're done!
     } else {
       Serial.print("!\n"); //Checksum failed
       linebuffer.remove(0);
@@ -360,6 +359,8 @@ void parseNewZoneData(String configString)
       delay(500);
     }
   }
+
+  return (false); //Checksum failed and we exhausted attempts
 }
 
 //Load the zone information and type of zone (rectangle, circle, other) from NVM
