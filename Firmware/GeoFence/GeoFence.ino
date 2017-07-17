@@ -17,9 +17,9 @@ TinyGPSPlus gps; //Declare gps object
 
 #include <EEPROM.h>
 
-//zoneX[] contains the 4 GPS coordinates for each rectangular zone, or 2 coordinates 
+//zoneX[] contains the 4 GPS coordinates for each rectangular zone, or 2 coordinates
 //and radius for a circular zone.
-double zone1[5]; 
+double zone1[5];
 double zone2[5];
 double zone3[5];
 double zone4[5];
@@ -35,8 +35,9 @@ char zoneType[4];
 //3 = Center Long of the circle
 //4 = Radius of circle
 
-byte STAT = 6; //Blue status LED next to ATmega
+byte STAT_LED = 6; //Blue status LED next to ATmega
 byte zoneIOPin[] = {7, 8, 9, 10}; //Four zone LEDs
+byte STAT_SYSTEM = A0; //Goes high when system has a valid lock and Zone pins are valid.
 
 #define MODE_WAITING_FOR_LOCK 0
 #define MODE_GPS_LOCKED 1
@@ -46,8 +47,10 @@ byte systemMode; //Keeps track of what mode we are in so as to control the statu
 void setup()
 {
   //Setup I/O
-  pinMode(STAT, OUTPUT);
-  digitalWrite(STAT, HIGH); //Indicate we are waiting for GPS data
+  pinMode(STAT_LED, OUTPUT);
+  digitalWrite(STAT_LED, HIGH); //Indicate we are waiting for GPS data
+  pinMode(STAT_SYSTEM, OUTPUT);
+  digitalWrite(STAT_SYSTEM, LOW); //Indicate zone pins are not yet valid
 
   //Configure Zone LEDs
   for (byte z = 0; z < 4; z++)
@@ -67,25 +70,27 @@ void setup()
     //GPS communication failure
     Serial.println("GPS module failed to respond. Please contact support.");
 
-    //Blink STAT and Zone LEDs to indicate fault
+    //Blink STAT_LED and Zone LEDs to indicate fault
     while (1) //Freeze!
     {
       digitalWrite(zoneIOPin[0], HIGH);
       digitalWrite(zoneIOPin[1], LOW);
       digitalWrite(zoneIOPin[2], HIGH);
       digitalWrite(zoneIOPin[3], LOW);
-      digitalWrite(STAT, HIGH);
+      digitalWrite(STAT_LED, HIGH);
       delay(1000);
       digitalWrite(zoneIOPin[0], LOW);
       digitalWrite(zoneIOPin[1], HIGH);
       digitalWrite(zoneIOPin[2], LOW);
       digitalWrite(zoneIOPin[3], HIGH);
-      digitalWrite(STAT, LOW);
+      digitalWrite(STAT_LED, LOW);
       delay(1000);
     }
   }
 
   systemMode = MODE_WAITING_FOR_LOCK;
+
+  Serial.println("GeoFence v1.0 Online");
 }
 
 void loop()
@@ -102,12 +107,17 @@ void loop()
     updateGeofence();
   }
 
-  //Once we have lock, go to new STAT LED mode
+  //Once we have lock, go to new STAT_LED LED mode
   if (gps.location.isValid())
+  {
     systemMode = MODE_GPS_LOCKED;
+    digitalWrite(STAT_SYSTEM, HIGH); //Indicate that zone pins are valid
+  }
   else
+  {
     systemMode = MODE_WAITING_FOR_LOCK;
-
+    digitalWrite(STAT_SYSTEM, LOW); //Indicate that zone pins are not currently valid
+  }
 
   // Check for a new config
   if (Serial.available()) {
@@ -123,17 +133,17 @@ void loop()
     int onSeconds = millis() / 1000;
     if (onSeconds % 2 == 0)
     {
-      digitalWrite(STAT, HIGH);
+      digitalWrite(STAT_LED, HIGH);
 
       //Indicate the number of satellites we can see
-      if(gps.satellites.value() >= 1) digitalWrite(zoneIOPin[0], HIGH);
-      if(gps.satellites.value() >= 2) digitalWrite(zoneIOPin[1], HIGH);
-      if(gps.satellites.value() >= 3) digitalWrite(zoneIOPin[2], HIGH);
-      if(gps.satellites.value() >= 4) digitalWrite(zoneIOPin[3], HIGH);
+      if (gps.satellites.value() >= 1) digitalWrite(zoneIOPin[0], HIGH);
+      if (gps.satellites.value() >= 2) digitalWrite(zoneIOPin[1], HIGH);
+      if (gps.satellites.value() >= 3) digitalWrite(zoneIOPin[2], HIGH);
+      if (gps.satellites.value() >= 4) digitalWrite(zoneIOPin[3], HIGH);
     }
     else
     {
-      digitalWrite(STAT, LOW);
+      digitalWrite(STAT_LED, LOW);
       digitalWrite(zoneIOPin[0], LOW);
       digitalWrite(zoneIOPin[1], LOW);
       digitalWrite(zoneIOPin[2], LOW);
@@ -161,14 +171,14 @@ void loop()
         //Take the current time and turn it into a value 0 to 255
         ledValue = map(ledValue, 500, 1000, 255, 0); //721 becomes 113
       }
-      analogWrite(STAT, ledValue);
+      analogWrite(STAT_LED, ledValue);
     }
     else
     {
       //Leave LED off for a second
-      digitalWrite(STAT, LOW);
+      digitalWrite(STAT_LED, LOW);
     }
-  } //End STAT LED control
+  } //End STAT_LED control
 
 
 }
@@ -191,7 +201,7 @@ void configure(String configString)
 
     attempts++;
 
-    digitalWrite(STAT, LOW);
+    digitalWrite(STAT_LED, LOW);
 
     strIndex++;
 
@@ -310,9 +320,9 @@ void configure(String configString)
     {
       for (byte x = 0 ; x < 5 ; x++)
       {
-        digitalWrite(STAT, HIGH);
+        digitalWrite(STAT_LED, HIGH);
         delay(200);
-        digitalWrite(STAT, LOW);
+        digitalWrite(STAT_LED, LOW);
         delay(200);
       }
 
@@ -348,14 +358,8 @@ void loadConfig() {
   //Error check zone data
   //If unit does not have any location data (first time power on)
   //then zero out the EEPROM
-  if(isnan(zone1[0])) zeroEEPROM();
-  if(zone1[0] > 360.0 || zone1[0] < -360.0) zeroEEPROM();
-
-  Serial.print("zone1: ");
-  Serial.println(zone1[0]);
-
-
-  while(1);
+  if (isnan(zone1[0])) zeroEEPROM();
+  if (zone1[0] > 360.0 || zone1[0] < -360.0) zeroEEPROM();
 
   //Set zone types based on zoneX data
   //00 = No coordinates
@@ -568,7 +572,7 @@ boolean checkCircle(int zone) {
 void zeroEEPROM(void)
 {
   Serial.println("Setting EEPROM to zero");
-  
+
   //Zero out the 4 bytes for each of the 5 zones
   for (byte i = 0 ; i < 5 * 4 ; i++)
   {
