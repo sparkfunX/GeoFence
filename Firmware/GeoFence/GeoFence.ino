@@ -39,6 +39,8 @@ byte STAT_LED = 6; //Blue status LED next to ATmega
 byte zoneIOPin[] = {7, 8, 9, 10}; //Four zone LEDs
 byte STAT_SYSTEM = A0; //Goes high when system has a valid lock and Zone pins are valid.
 
+boolean ZONES_EMPTY = 1; //Used for system status LED to alert user to "No Zones Programmed" state
+
 #define MODE_WAITING_FOR_LOCK 0
 #define MODE_GPS_LOCKED 1
 
@@ -65,6 +67,21 @@ void setup()
   //Load zone data from EEPROM
   loadZoneData();
 
+  //Print the zoneType for each zone for troubleshooting
+  for(int i=0; i<4; i++){
+  Serial.print("Zone ");
+  Serial.print(i+1);
+  Serial.print(" Type: ");
+  Serial.println(zoneType[i]);
+  }
+
+  //Check if there are no zones programmed and alert the user
+  for(int i=0; i<4; i++){
+    if(zoneType[i]!='X'){ZONES_EMPTY=0;}
+  }
+  if(ZONES_EMPTY){Serial.println("There are no zones programmed! No tests will be performed!");}
+
+    //Start GPS Module comms
   if (myI2CGPS.begin() == false)
   {
     //GPS communication failure
@@ -157,8 +174,12 @@ void loop()
   else if (systemMode == MODE_GPS_LOCKED)
   {
     digitalWrite(STAT_LED, HIGH);
+  };
+  //This setting overrides the others
+  if (ZONES_EMPTY)
+  {
+    digitalWrite(STAT_LED, LOW);
   } //End STAT_LED control
-
 
 }
 
@@ -232,9 +253,19 @@ boolean parseNewZoneData(String configString)
           strIndex++;
           str_to_double_to_EEPROM(linebuffer, addr);
 
+          //Zero the circle-only bytes
+          addr = 16 + (zone * 20);
+          EEPROM.put(addr, long(0L));          
+
           break;
 
         case 'C': //Zone is circular
+
+          //Zero the rectangle-only bytes
+          addr = 0 + (zone * 20); 
+          EEPROM.put(addr, long(0L));
+          addr = 4 + (zone * 20);
+          EEPROM.put(addr, long(0L));        
 
           addr = 8 + (zone * 20);
           linebuffer.remove(0);
@@ -265,7 +296,17 @@ boolean parseNewZoneData(String configString)
 
           break;
 
-        case 'X': //Zone is undefined
+        case 'X': //Zone is undefined, fill with zeroes
+          addr = 0 + (zone * 20);
+          EEPROM.put(addr, long(0L));
+          addr = 4 + (zone * 20);
+          EEPROM.put(addr, long(0L));
+          addr = 8 + (zone * 20);
+          EEPROM.put(addr, long(0L));
+          addr = 12 + (zone * 20);
+          EEPROM.put(addr, long(0L));
+          addr = 16 + (zone * 20);
+          EEPROM.put(addr, long(0L));
           break;
 
       }
@@ -403,13 +444,13 @@ void updateGeofence() {
 
       case 'R':
         Serial.print("Checking Rectangular Zone ");
-        Serial.println(zone);
+        Serial.println(zone+1);//Zones are only zero-indexed in firmware
         digitalWrite(zoneIOPin[zone], checkRectangle(zone));
         break;
 
       case 'C':
         Serial.print("Checking Circular Zone ");
-        Serial.println(zone);
+        Serial.println(zone+1);//Zones are only zero-indexed in firmware
         digitalWrite(zoneIOPin[zone], checkCircle(zone));
         break;
 
