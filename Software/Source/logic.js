@@ -58,6 +58,15 @@ function serialSwitch() {
 	});
 		
 	statusBar("opened serial port on " + document.getElementById("serialPortNum").value + "...");
+	// Device will reset on serial connection. Keep user from trying to upload config too soon.
+	document.getElementById("logData").disabled = true;
+	setTimeout(function(){document.getElementById("logData").disabled = false;}, 3000);
+}
+
+function serialClose() {
+	
+	port.close();
+	statusBar("active serial port closed");
 	
 }
 
