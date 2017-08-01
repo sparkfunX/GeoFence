@@ -1,4 +1,4 @@
-update=6/29/2017 5:01:28 PM
+update=8/1/2017 12:09:25 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -23,8 +23,6 @@ ModuleOutlineThickness=0.150000000000
 [cvpcb]
 version=1
 NetIExt=net
-[schematic_editor]
-LabSize=50
 [eeschema]
 version=1
 LibDir=../../../SparkX/KiCAD Stuff;../../../SparkX/KiCAD Stuff/SparkFun-Libraries/SparkFun-KiCad-Libraries-master
@@ -87,3 +85,13 @@ LibName55=SparkFun-Libraries/SparkFun-KiCad-Libraries-master/NewlyCreated/SparkX
 LibName56=SparkFun-Libraries/SparkFun-KiCad-Libraries-master/NewlyCreated/Switches
 [general]
 version=1
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=50
