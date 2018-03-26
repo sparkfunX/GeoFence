@@ -1,10 +1,10 @@
 {
   "name": "GeoFence",
   "author": "Nick Poole @ SparkFun Electronics",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "main": "main.js",
   "devDependencies": {
-    "electron": "1.4.15",
+    "electron": "1.8.2-beta.5",
     "electron-packager": "^8.7.1",
     "electron-rebuild": "^1.5.11",
     "serialport": "^4.0.7"
