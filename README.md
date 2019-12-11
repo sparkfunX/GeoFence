@@ -55,3 +55,7 @@ the checksum, modulo 256. It is calculated in the App thusly:
   ```
   
   The checksum value is written to a single byte and followed by a Line Feed ("\n")
+  
+### Serial Settings
+The configuration string may be sent at any time at 9600 baud. The board will return with "$" if the configuration was succesful, if
+the string did not pass checksum, it will return "!"
