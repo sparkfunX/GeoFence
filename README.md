@@ -11,22 +11,22 @@ replace our key string in the app source code (index.html line 77), and recompil
 2. You can construct your own configuration string using lat-long data from the source of your choosing and send it to the board using 
 a serial terminal. Configuration strings are constructed as follows:
 
-##Complete Configuration String
+## Complete Configuration String
 
 | Header | Zone 1 | Zone 2 | Zone 3 | Zone 4 | Footer | Chksum | Terminator |
 | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ---------- |
 | "$\n"  |        |        |        |        |  "^\n" |        |     "$"    |
 
-##Zone Configuration
+## Zone Configuration
 
-###Null Zone
+### Null Zone
 The device expects to see configurations for each zone, even if the zone is "unprogrammed". Unprogrammed zones are marked with the "X" flag.
 
 | Header |
 | ------ |
 |  "X\n" |
 
-###Rectangular Zone
+### Rectangular Zone
 Rectangular Boundaries are defined by their NorthEast and SouthWest corners. The Latitude and Longitude of each corner is fixed to 
 6 digits of precision after the decimal. Rectangular Zones are marked with the "R" Flag.
 
@@ -34,7 +34,7 @@ Rectangular Boundaries are defined by their NorthEast and SouthWest corners. The
 | ------ | ------------- | -------------- | ------------- | -------------- |
 |  "R\n" | "xx.xxxxxx\n" |  "-x.xxxxxx\n" | "xxx.xxxxxx\n"| "xx.xxxxxx\n"  |
 
-###Circular Zone
+### Circular Zone
 Circular Boundaries are defined by their center coordinate and their radius in meters, rounded to the nearest meter. 
 Circular Zones are marked with the "C" flag.
 
