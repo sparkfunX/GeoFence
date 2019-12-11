@@ -12,6 +12,7 @@ replace our key string in the app source code (index.html line 77), and recompil
 a serial terminal. Configuration strings are constructed as follows:
 
 ##Complete Configuration String
+
 | Header | Zone 1 | Zone 2 | Zone 3 | Zone 4 | Footer | Chksum | Terminator |
 | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ---------- |
 | "$\n"  |        |        |        |        |  "^\n" |        |     "$"    |
