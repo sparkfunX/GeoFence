@@ -1,9 +1,9 @@
 # GeoFence
 A device to monitor when it is inside or outside various GPS waypoints.
 
-#The GeoFence App is no longer supported
+# The GeoFence App is no longer supported
 Unfortunately, Google has changed the way that they bill their Maps API and because we're no longer building the GeoFence hardware, 
-we won't be updating the software. If you still have a GeoFence board that you'd like to continue using, you have two options:
+we won't be updating the software. If you're looking for a way to create and enforce your own geofences, we encourage you to check out the [uBlox](https://learn.sparkfun.com/tutorials/getting-started-with-u-center-for-u-blox) products we now carry. If you still have a GeoFence board that you'd like to continue using, you have two options:
 
 1. You can aqcuire your own [Google Maps API Key](https://developers.google.com/maps/documentation/javascript/get-api-key), 
 replace our key string in the app source code (index.html line 77), and recompile the app in [electronjs](https://electronjs.org/).
